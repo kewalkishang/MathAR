@@ -50,23 +50,33 @@ public class TestScript : MonoBehaviour
         Vector3 ver7 = new Vector3(xmid - xext, ymid - yext, zmid + zext);
         Vector3 ver8 = new Vector3(xmid - xext, ymid + yext, zmid + zext);
 
-        /* GameObject v1 = Instantiate(sphere, ver1, Quaternion.identity);
+        /*
+         GameObject v1 = Instantiate(sphere, ver1, Quaternion.identity);
          GameObject v2 = Instantiate(sphere, ver2, Quaternion.identity);
          GameObject v3 = Instantiate(sphere, ver3, Quaternion.identity);
          GameObject v4 = Instantiate(sphere, ver4, Quaternion.identity);
          GameObject v5 = Instantiate(sphere, ver5, Quaternion.identity);
          GameObject v6 = Instantiate(sphere, ver6, Quaternion.identity);
-         GameObject v7 = Instantiate(sphere, ver7, Quaternion.identity);
-         GameObject v8 = Instantiate(sphere, ver8, Quaternion.identity);*/
+        GameObject v7 = Instantiate(sphere, ver7, Quaternion.identity);
+         GameObject v8 = Instantiate(sphere, ver8, Quaternion.identity);
+         */
+
 
 
         vertices.Add(ver1);
         vertices.Add(ver2);
         vertices.Add(ver3);
         vertices.Add(ver4);
-        highlightEdge(vertices);
+       // highlightEdge(vertices);
 
     }
+
+
+    public void highlightFace()
+    {
+
+    }
+
 
     public void highlightEdge(List<Vector3> vert)
     {

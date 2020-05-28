@@ -126,18 +126,26 @@ namespace GoogleARCore.Examples.HelloAR
                         DetectedPlane detectedPlane = hit.Trackable as DetectedPlane;
                         if (detectedPlane.PlaneType == DetectedPlaneType.Vertical)
                         {
-                            prefab = GameObjectVerticalPlanePrefab;
+                            //  prefab = GameObjectVerticalPlanePrefab;
+                            GameObjectVerticalPlanePrefab.transform.position = hit.Pose.position;
+                              
+
                         }
                         else
                         {
-                            prefab = GameObjectHorizontalPlanePrefab;
+                             GameObjectHorizontalPlanePrefab.transform.position = hit.Pose.position;
+                            GameObjectHorizontalPlanePrefab.transform.Rotate(0, k_PrefabRotation, 0, Space.Self);
+                            var anchor = hit.Trackable.CreateAnchor(hit.Pose);
+
+                            // Make game object a child of the anchor.
+                            GameObjectVerticalPlanePrefab.transform.parent = anchor.transform; 
                         }
                     }
                     else
                     {
                         prefab = GameObjectHorizontalPlanePrefab;
                     }
-
+/*
                     // Instantiate prefab at the hit pose.
                     var gameObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
 
@@ -150,7 +158,7 @@ namespace GoogleARCore.Examples.HelloAR
                     var anchor = hit.Trackable.CreateAnchor(hit.Pose);
 
                     // Make game object a child of the anchor.
-                    gameObject.transform.parent = anchor.transform;
+                    gameObject.transform.parent = anchor.transform;*/
                 }
             }
         }
