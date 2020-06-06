@@ -45,7 +45,23 @@ public class TouchTest : MonoBehaviour
 
             if (touch.phase == TouchPhase.Began)
             {
-                text.text = "Touch began at " + touch.position;
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                // Does the ray intersect any objects excluding the player layer
+                if (Physics.Raycast(ray, out hit))
+                {
+                    text.text = "Hit " + hit.collider.name;
+                    //  Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+                    Debug.Log("Did Hit");
+                }
+                else
+                {
+                    text.text = "No HIT";
+                    //  Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
+                    Debug.Log("Did not Hit");
+                }
+                
+                     //  text.text = "Touch began at " + touch.position;
                 Debug.Log("Touch phase began at: " + touch.position);
             }
             else if (touch.phase == TouchPhase.Moved)

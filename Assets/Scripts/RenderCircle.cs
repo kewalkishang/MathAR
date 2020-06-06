@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class RenderCircle : MonoBehaviour
 {
+    public float radius= 0.5f;
+    public float size = 0.02f;
     // Start is called before the first frame update
     void Start()
     {
         var go1 = new GameObject { name = "Circle" };
-       DrawCircle( 0.5f, .02f);
+       DrawCircle( radius, .02f);
     }
 
     // Update is called once per frame

@@ -242,12 +242,16 @@
     <Compile Include="Assets\GoogleARCore\SDK\Scripts\XPSession.cs" />
     <Compile Include="Assets\GoogleARCore\SDK\Scripts\XPSessionStatus.cs" />
     <Compile Include="Assets\GoogleARCore\SDK\Scripts\XPTrackingState.cs" />
+    <Compile Include="Assets\Scripts\ExampleClickEvents.cs" />
+    <Compile Include="Assets\Scripts\FloatingActionButton.cs" />
+    <Compile Include="Assets\Scripts\LerpTest.cs" />
     <Compile Include="Assets\Scripts\LineRendererHelper.cs" />
     <Compile Include="Assets\Scripts\LookAtCam.cs" />
     <Compile Include="Assets\Scripts\RenderCircle.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\Scripts\TestScript.cs" />
     <Compile Include="Assets\Scripts\TouchTest.cs" />
+    <Compile Include="Assets\Scripts\UITest.cs" />
     <Compile Include="Assets\Tutorial_Info\Scripts\Readme.cs" />
     <None Include="Assets\GoogleARCore\Examples\Common\Materials\Shaders\PlaneGrid.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
