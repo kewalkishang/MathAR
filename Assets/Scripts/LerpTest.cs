@@ -55,8 +55,8 @@ public class LerpTest : MonoBehaviour
         DestPos[1] = SphereDest.transform.localPosition;
         DestPos[2] = CylinderDest.transform.localPosition;
         DestPos[3] = ConeDest.transform.localPosition;
-        MainMenu.SetActive(false);
-        SelectShapeMenu.SetActive(true);
+//MainMenu.SetActive(false);
+     //   SelectShapeMenu.SetActive(true);
         mode = true;
         Debug.Log("Learn clicked");
     }
@@ -72,7 +72,7 @@ public class LerpTest : MonoBehaviour
         DestPos[1] = startPos[1];
         DestPos[2] = startPos[2];
         DestPos[3] = startPos[3];
-        MainMenu.SetActive(true);
-        SelectShapeMenu.SetActive(false);
+       // MainMenu.SetActive(true);
+//        SelectShapeMenu.SetActive(false);
     }
 }

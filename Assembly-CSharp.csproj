@@ -250,6 +250,7 @@
     <Compile Include="Assets\Scripts\RenderCircle.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\Scripts\TestScript.cs" />
+    <Compile Include="Assets\Scripts\ToggleSwitch.cs" />
     <Compile Include="Assets\Scripts\TouchTest.cs" />
     <Compile Include="Assets\Scripts\UITest.cs" />
     <Compile Include="Assets\Tutorial_Info\Scripts\Readme.cs" />

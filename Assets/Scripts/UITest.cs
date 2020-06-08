@@ -8,7 +8,10 @@ public class UITest : MonoBehaviour
 
     public GameObject ShapeSelectionMenu; 
     public GameObject LearningMenu;
+    public GameObject MainMenu;
     public GameObject QuizMenu;
+   
+
     void Start()
     {
         
@@ -17,21 +20,15 @@ public class UITest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
 
-    public void BackToShapeSelectionMenu()
-    {
-        ShapeSelectionMenu.SetActive(true);
-        LearningMenu.SetActive(false);
-        QuizMenu.SetActive(false);
-    }
-
+  
     public void GoToLearningMenu()
     {
         ShapeSelectionMenu.SetActive(false);
         LearningMenu.SetActive(true);
         QuizMenu.SetActive(false);
+        MainMenu.SetActive(false);
     }
 
     public void GoToQuizMenu()
@@ -39,8 +36,34 @@ public class UITest : MonoBehaviour
         ShapeSelectionMenu.SetActive(false);
         LearningMenu.SetActive(false);
         QuizMenu.SetActive(true);
+        MainMenu.SetActive(false);
     }
 
+    public void GoToShapeSelectionMenu()
+    {
+        ShapeSelectionMenu.SetActive(true);
+        LearningMenu.SetActive(false);
+        QuizMenu.SetActive(false);
+        MainMenu.SetActive(false);
+    }
+
+
+    public void GoToMainMenu()
+    {
+        ShapeSelectionMenu.SetActive(false);
+        LearningMenu.SetActive(false);
+        QuizMenu.SetActive(false);
+        MainMenu.SetActive(true);
+    }
+
+    public void learnmode()
+    {
+    
+        //MainMenu.SetActive(false);
+        //   SelectShapeMenu.SetActive(true);
+    
+        Debug.Log("Learn clicked");
+    }
     public void SwitchToAR()
     {
 
@@ -51,5 +74,12 @@ public class UITest : MonoBehaviour
 
     }
 
-
+    public void ToggleButtonOn()
+    {
+        Debug.Log("toggleButton ON clicked");
+    }
+    public void ToggleButtonOff()
+    {
+        Debug.Log("toggleButton OFF clicked");
+    }
 }

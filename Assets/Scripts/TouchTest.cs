@@ -2,13 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class TouchTest : MonoBehaviour
 {
     public Text text;
     public float rotationRate = 0.01f;
-    public GameObject cube;
+
+    GameObject SelectedShape;
+    bool inARMode = false;
+
+    [System.Serializable]
+    public class InteractionEvent : UnityEvent<string> { }
+    public InteractionEvent UpdateSelectedShape = new InteractionEvent();
     // Start is called before the first frame update
+
+    public void UpdateShape(string name)
+    {
+        Debug.Log("updateShape called");
+        UpdateSelectedShape.Invoke(name);
+    }
+
+
     void Start()
     {
         
@@ -51,6 +66,8 @@ public class TouchTest : MonoBehaviour
                 if (Physics.Raycast(ray, out hit))
                 {
                     text.text = "Hit " + hit.collider.name;
+                    SelectedShape = hit.transform.gameObject;
+                    UpdateShape(SelectedShape.name);
                     //  Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
                     Debug.Log("Did Hit");
                 }
@@ -68,8 +85,10 @@ public class TouchTest : MonoBehaviour
             {
                 Debug.Log("Touch phase Moved");
                 text.text = "Touch phase moved";
-              cube.transform.Rotate(touch.deltaPosition.y * rotationRate, -touch.deltaPosition.x * rotationRate, 0, Space.World);
-
+                if (SelectedShape != null && (inARMode == false))
+                {
+                    SelectedShape.transform.Rotate(touch.deltaPosition.y * rotationRate, -touch.deltaPosition.x * rotationRate, 0, Space.World);
+                }
               //  cube.transform.RotateAround(Vector3.down, touch.deltaPosition.x * rotationRate);
              //   cube.transform.RotateAround(Vector3.right, touch.deltaPosition.y * rotationRate);
             }
@@ -81,5 +100,16 @@ public class TouchTest : MonoBehaviour
         }
 
 
+    }
+
+
+    public void EnableAR()
+    {
+        inARMode = true;
+    }
+
+    public void DisableAR()
+    {
+        inARMode = false;
     }
 }

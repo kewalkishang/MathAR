@@ -68,6 +68,21 @@ namespace GoogleARCore.Examples.HelloAR
         /// </summary>
         private bool m_IsQuitting = false;
 
+
+        /// Variables for references 
+        /// 
+        public GameObject LearningMenu;
+        public GameObject QuizMenu;
+        public GameObject SelectedShapePosition;
+        public GameObject Cube;
+        public GameObject Cone;
+        public GameObject Cylinder;
+        public GameObject Sphere;
+
+        ///Variables for States
+        private bool IsAR = false;
+        private GameObject SelectedShape;
+
         /// <summary>
         /// The Unity Awake() method.
         /// </summary>
@@ -160,6 +175,53 @@ namespace GoogleARCore.Examples.HelloAR
                     // Make game object a child of the anchor.
                     gameObject.transform.parent = anchor.transform;*/
                 }
+            }
+        }
+
+
+
+
+        public void SwitchOnAR()
+        {
+            Debug.Log("toggleButton ON clicked");
+            IsAR = true;
+            LearningMenu.SetActive(false);
+            QuizMenu.SetActive(false);
+            SelectedShape.transform.parent = null;
+        }
+
+        public void SwitchOffAR()
+        {
+            Debug.Log("toggleButton OFF clicked");
+            IsAR = false;
+            LearningMenu.SetActive(true);
+            QuizMenu.SetActive(true);
+            SelectedShape.transform.parent = SelectedShapePosition.transform;
+            SelectedShape.transform.localPosition = new Vector3(0, 0, 0);
+        }
+
+
+        public void UpdateSelectedShape(string SelectedShapeName)
+        {
+            Debug.Log("Selected shape " + SelectedShapeName);
+            switch (SelectedShapeName)
+            {
+                case "Cube": SelectedShape = Cube;
+                    break;
+                case "Cone":
+                    SelectedShape = Cone;
+                    break;
+                case "Cylinder":
+                    SelectedShape = Cylinder;
+                    break;
+                case "Sphere":
+                    SelectedShape = Sphere;
+                    break;
+                default:
+                    Debug.Log("NOTHING SELECTED");
+                    break;
+
+
             }
         }
 
