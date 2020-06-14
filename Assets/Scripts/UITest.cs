@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class UITest : MonoBehaviour
 {
@@ -10,7 +12,13 @@ public class UITest : MonoBehaviour
     public GameObject LearningMenu;
     public GameObject MainMenu;
     public GameObject QuizMenu;
-   
+    public Text feedback;
+    public GameObject Background3d;
+
+    [System.Serializable]
+    public class InteractionEvent : UnityEvent { }
+
+    public InteractionEvent OnShapeSelectionMenuSwitch = new InteractionEvent();
 
     void Start()
     {
@@ -25,6 +33,7 @@ public class UITest : MonoBehaviour
   
     public void GoToLearningMenu()
     {
+        StateTracker.instance.setCurrentState(StateTracker.State.LearningMode);
         ShapeSelectionMenu.SetActive(false);
         LearningMenu.SetActive(true);
         QuizMenu.SetActive(false);
@@ -33,6 +42,7 @@ public class UITest : MonoBehaviour
 
     public void GoToQuizMenu()
     {
+        StateTracker.instance.setCurrentState(StateTracker.State.QuizMode);
         ShapeSelectionMenu.SetActive(false);
         LearningMenu.SetActive(false);
         QuizMenu.SetActive(true);
@@ -41,15 +51,19 @@ public class UITest : MonoBehaviour
 
     public void GoToShapeSelectionMenu()
     {
+        SwitchTo3D();
+        StateTracker.instance.setCurrentState(StateTracker.State.ShapeSelection);
         ShapeSelectionMenu.SetActive(true);
         LearningMenu.SetActive(false);
         QuizMenu.SetActive(false);
         MainMenu.SetActive(false);
+        Background3d.SetActive(true);
     }
 
 
     public void GoToMainMenu()
     {
+        StateTracker.instance.setCurrentState(StateTracker.State.MainMenu);
         ShapeSelectionMenu.SetActive(false);
         LearningMenu.SetActive(false);
         QuizMenu.SetActive(false);
@@ -71,7 +85,8 @@ public class UITest : MonoBehaviour
 
     public void SwitchTo3D()
     {
-
+        // feedback.text = "Switched to 3D " + name;
+        OnShapeSelectionMenuSwitch.Invoke();
     }
 
     public void ToggleButtonOn()

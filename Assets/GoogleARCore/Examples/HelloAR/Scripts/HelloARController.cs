@@ -24,6 +24,7 @@ namespace GoogleARCore.Examples.HelloAR
     using GoogleARCore;
     using GoogleARCore.Examples.Common;
     using UnityEngine;
+    using UnityEngine.UI;
     using UnityEngine.EventSystems;
 
 #if UNITY_EDITOR
@@ -71,14 +72,17 @@ namespace GoogleARCore.Examples.HelloAR
 
         /// Variables for references 
         /// 
-        public GameObject LearningMenu;
+        public GameObject Background3DMenu;
         public GameObject QuizMenu;
         public GameObject SelectedShapePosition;
+        public GameObject SelectedParent;
         public GameObject Cube;
         public GameObject Cone;
         public GameObject Cylinder;
         public GameObject Sphere;
-
+        public Text FeedbackText;
+        public float ForwardDistance = 1f;
+        int count = 0;
         ///Variables for States
         private bool IsAR = false;
         private GameObject SelectedShape;
@@ -100,80 +104,99 @@ namespace GoogleARCore.Examples.HelloAR
         {
             _UpdateApplicationLifecycle();
 
+           
             // If the player has not touched the screen, we are done with this update.
             Touch touch;
             if (Input.touchCount < 1 || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
             {
+
                 return;
             }
 
             // Should not handle input if the player is pointing on UI.
-            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+           /* if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
             {
+                count = count + 1;
+                FeedbackText.text = "HITTING ui " + count; 
                 return;
-            }
+            }*/
 
-            // Raycast against the location the player touched to search for planes.
-            TrackableHit hit;
-            TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
-                TrackableHitFlags.FeaturePointWithSurfaceNormal;
-
-            if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
+            if (StateTracker.instance.getCurrentState() == StateTracker.State.LearningMode)
             {
-                // Use hit pose and camera pose to check if hittest is from the
-                // back of the plane, if it is, no need to create the anchor.
-                if ((hit.Trackable is DetectedPlane) &&
-                    Vector3.Dot(FirstPersonCamera.transform.position - hit.Pose.position,
-                        hit.Pose.rotation * Vector3.up) < 0)
-                {
-                    Debug.Log("Hit at back of the current DetectedPlane");
-                }
-                else
-                {
-                    // Choose the prefab based on the Trackable that got hit.
-                    GameObject prefab;
-                    if (hit.Trackable is FeaturePoint)
-                    {
-                        prefab = GameObjectPointPrefab;
-                    }
-                    else if (hit.Trackable is DetectedPlane)
-                    {
-                        DetectedPlane detectedPlane = hit.Trackable as DetectedPlane;
-                        if (detectedPlane.PlaneType == DetectedPlaneType.Vertical)
-                        {
-                            //  prefab = GameObjectVerticalPlanePrefab;
-                            GameObjectVerticalPlanePrefab.transform.position = hit.Pose.position;
-                              
+                count = count + 1;
+                FeedbackText.text = "INSIDE LOOP" + count;
 
-                        }
-                        else
-                        {
-                             GameObjectHorizontalPlanePrefab.transform.position = hit.Pose.position;
-                            GameObjectHorizontalPlanePrefab.transform.Rotate(0, k_PrefabRotation, 0, Space.Self);
-                            var anchor = hit.Trackable.CreateAnchor(hit.Pose);
 
-                            // Make game object a child of the anchor.
-                            GameObjectVerticalPlanePrefab.transform.parent = anchor.transform; 
-                        }
+                // Raycast against the location the player touched to search for planes.
+                TrackableHit hit;
+                TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
+                    TrackableHitFlags.FeaturePointWithSurfaceNormal;
+
+
+                if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
+                {
+                    count = count + 1;
+                    FeedbackText.text = "RAYCAST " + count;
+                    // Use hit pose and camera pose to check if hittest is from the
+                    // back of the plane, if it is, no need to create the anchor.
+                    if ((hit.Trackable is DetectedPlane) &&
+                        Vector3.Dot(FirstPersonCamera.transform.position - hit.Pose.position,
+                            hit.Pose.rotation * Vector3.up) < 0)
+                    {
+                        Debug.Log("Hit at back of the current DetectedPlane");
                     }
                     else
                     {
-                        prefab = GameObjectHorizontalPlanePrefab;
+                        // Choose the prefab based on the Trackable that got hit.
+                        GameObject prefab;
+                        if (hit.Trackable is FeaturePoint)
+                        {
+                            //  prefab = GameObjectPointPrefab;
+                            Debug.Log("HIT featurepoint");
+                        }
+                        else if (hit.Trackable is DetectedPlane)
+                        {
+                            DetectedPlane detectedPlane = hit.Trackable as DetectedPlane;
+                            if (detectedPlane.PlaneType == DetectedPlaneType.Vertical)
+                            {
+                                //  prefab = GameObjectVerticalPlanePrefab;
+                             //   GameObjectVerticalPlanePrefab.transform.position = hit.Pose.position;
+
+
+                            }
+                            else
+                            {
+                                /// GameObjectHorizontalPlanePrefab.transform.position = hit.Pose.position;
+                                //  GameObjectHorizontalPlanePrefab.transform.Rotate(0, k_PrefabRotation, 0, Space.Self);
+                                 var anchor = hit.Trackable.CreateAnchor(hit.Pose);
+
+                                // Make game object a child of the anchor.
+                                // GameObjectVerticalPlanePrefab.transform.parent = anchor.transform;
+                                FeedbackText.text = "CLICKED ON HORIXONTAL PLANE";
+                                SelectedShape.transform.parent = anchor.transform;
+                                SelectedShape.transform.localPosition = Vector3.zero;
+                                SelectedShape.transform.rotation = Quaternion.identity;
+                                //SelectedShape.transform.position = hit.Pose.position;
+
+
+                            }
+                        }
+                        
+                        /*
+                                            // Instantiate prefab at the hit pose.
+                                            var gameObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
+
+                                            // Compensate for the hitPose rotation facing away from the raycast (i.e.
+                                            // camera).
+                                            gameObject.transform.Rotate(0, k_PrefabRotation, 0, Space.Self);
+
+                                            // Create an anchor to allow ARCore to track the hitpoint as understanding of
+                                            // the physical world evolves.
+                                            var anchor = hit.Trackable.CreateAnchor(hit.Pose);
+
+                                            // Make game object a child of the anchor.
+                                            gameObject.transform.parent = anchor.transform;*/
                     }
-/*
-                    // Instantiate prefab at the hit pose.
-                    var gameObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
-
-                    // Compensate for the hitPose rotation facing away from the raycast (i.e.
-                    // camera).
-                    gameObject.transform.Rotate(0, k_PrefabRotation, 0, Space.Self);
-
-                    // Create an anchor to allow ARCore to track the hitpoint as understanding of
-                    // the physical world evolves.
-                    var anchor = hit.Trackable.CreateAnchor(hit.Pose);
-
-                    // Make game object a child of the anchor.
-                    gameObject.transform.parent = anchor.transform;*/
                 }
             }
         }
@@ -183,45 +206,57 @@ namespace GoogleARCore.Examples.HelloAR
 
         public void SwitchOnAR()
         {
+            UpdateSelectedShape();
             Debug.Log("toggleButton ON clicked");
             IsAR = true;
-            LearningMenu.SetActive(false);
+            Background3DMenu.SetActive(false);
             QuizMenu.SetActive(false);
+           // SelectedShape.transform.SetParent(FirstPersonCamera.transform);
+           // SelectedShape.transform.localPosition = Vector3.forward * ForwardDistance;
+          //  Vector3 currentGlobalPos = SelectedShape.transform.position;
+
+
             SelectedShape.transform.parent = null;
+           // SelectedShape.transform.position = new Vector3(currentGlobalPos.x, FirstPersonCamera.transform.position.y, currentGlobalPos.z);
+
         }
 
         public void SwitchOffAR()
         {
+            UpdateSelectedShape();
             Debug.Log("toggleButton OFF clicked");
             IsAR = false;
-            LearningMenu.SetActive(true);
+            Background3DMenu.SetActive(true);
             QuizMenu.SetActive(true);
-            SelectedShape.transform.parent = SelectedShapePosition.transform;
-            SelectedShape.transform.localPosition = new Vector3(0, 0, 0);
+            SelectedShape.transform.parent = SelectedParent.transform;
+            SelectedShape.transform.localPosition = SelectedShapePosition.transform.localPosition;
+            FeedbackText.text = "SWITCH OFF CALLED";
         }
 
 
-        public void UpdateSelectedShape(string SelectedShapeName)
+        public void UpdateSelectedShape()
         {
-            Debug.Log("Selected shape " + SelectedShapeName);
-            switch (SelectedShapeName)
+            
+
+
+            if (Cone.activeSelf)
             {
-                case "Cube": SelectedShape = Cube;
-                    break;
-                case "Cone":
-                    SelectedShape = Cone;
-                    break;
-                case "Cylinder":
-                    SelectedShape = Cylinder;
-                    break;
-                case "Sphere":
-                    SelectedShape = Sphere;
-                    break;
-                default:
-                    Debug.Log("NOTHING SELECTED");
-                    break;
-
-
+                SelectedShape = Cone;
+            }
+            else
+           if (Cube.activeSelf)
+            {
+                SelectedShape = Cube;
+            }
+            else
+           if (Cylinder.activeSelf)
+            {
+                SelectedShape = Cylinder;
+            }
+            else
+               if (Sphere.activeSelf)
+            {
+                SelectedShape = Sphere;
             }
         }
 
