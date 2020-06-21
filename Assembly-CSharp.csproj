@@ -244,11 +244,15 @@
     <Compile Include="Assets\GoogleARCore\SDK\Scripts\XPTrackingState.cs" />
     <Compile Include="Assets\Scripts\ExampleClickEvents.cs" />
     <Compile Include="Assets\Scripts\FloatingActionButton.cs" />
+    <Compile Include="Assets\Scripts\LearningMode.cs" />
     <Compile Include="Assets\Scripts\LerpTest.cs" />
     <Compile Include="Assets\Scripts\LineRendererHelper.cs" />
     <Compile Include="Assets\Scripts\LookAtCam.cs" />
+    <Compile Include="Assets\Scripts\QuizManager.cs" />
     <Compile Include="Assets\Scripts\RenderCircle.cs" />
+    <Compile Include="Assets\Scripts\ShapeDataManager.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
+    <Compile Include="Assets\Scripts\Slider.cs" />
     <Compile Include="Assets\Scripts\StateTracker.cs" />
     <Compile Include="Assets\Scripts\TestScript.cs" />
     <Compile Include="Assets\Scripts\TextManager.cs" />

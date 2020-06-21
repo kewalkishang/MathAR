@@ -15,6 +15,7 @@ public class LerpTest : MonoBehaviour
     public GameObject ConeDest;
     public GameObject SelectedShapePosition;
     public GameObject Background;
+    public GameObject DisplayPosition;
     public bool mode = false;
     public float smooth = 1;
     Vector3[] startPos = new Vector3[4];
@@ -115,4 +116,28 @@ public class LerpTest : MonoBehaviour
             DestPos[1] = SelectedShapePosition.transform.localPosition;
         }
     }
+
+    public void UpdateSelectedToDisplayPosition()
+    {
+        if (Cone.activeSelf)
+        {
+            DestPos[3] = DisplayPosition.transform.localPosition;
+        }
+        else
+            if (Cube.activeSelf)
+        {
+            DestPos[0] = DisplayPosition.transform.localPosition;
+        }
+        else
+            if (Cylinder.activeSelf)
+        {
+            DestPos[2] = DisplayPosition.transform.localPosition;
+        }
+        else
+        if (Sphere.activeSelf)
+        {
+            DestPos[1] = DisplayPosition.transform.localPosition;
+        }
+    }
+
 }

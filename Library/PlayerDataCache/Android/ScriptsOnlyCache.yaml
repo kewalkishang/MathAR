@@ -14,10 +14,13 @@ ScriptsOnlyBuild:
     - GoogleARCore.Examples.Common.PointcloudVisualizer
     - GoogleARCore.Examples.Common.RawImageVideoPlayer
     - GoogleARCore.Examples.HelloAR.HelloARController
+    - LearningMode
     - LerpTest
     - LineRendererHelper
     - LookAtCam
     - RenderCircle
+    - ShapeDataManager
+    - Slider
     - StateTracker
     - TextManager
     - ToggleSwitch
@@ -88,75 +91,81 @@ ScriptsOnlyBuild:
     - Class: 111
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 9618}
+      Script: {instanceID: 9508}
     - Class: 114
-      Script: {instanceID: 9668}
+      Script: {instanceID: 9620}
     - Class: 114
       Script: {instanceID: 9670}
     - Class: 114
-      Script: {instanceID: 9676}
+      Script: {instanceID: 9672}
     - Class: 114
-      Script: {instanceID: 9682}
+      Script: {instanceID: 9678}
     - Class: 114
-      Script: {instanceID: 9690}
+      Script: {instanceID: 9684}
     - Class: 114
-      Script: {instanceID: 9712}
+      Script: {instanceID: 9692}
     - Class: 114
-      Script: {instanceID: 9726}
+      Script: {instanceID: 9714}
     - Class: 114
       Script: {instanceID: 9728}
     - Class: 114
-      Script: {instanceID: 9894}
+      Script: {instanceID: 9730}
     - Class: 114
-      Script: {instanceID: 9904}
+      Script: {instanceID: 9896}
     - Class: 114
-      Script: {instanceID: 10040}
+      Script: {instanceID: 9906}
     - Class: 114
-      Script: {instanceID: 10158}
+      Script: {instanceID: 10042}
     - Class: 114
-      Script: {instanceID: 10170}
+      Script: {instanceID: 10160}
     - Class: 114
-      Script: {instanceID: 10174}
+      Script: {instanceID: 10172}
     - Class: 114
-      Script: {instanceID: 10190}
+      Script: {instanceID: 10176}
     - Class: 114
-      Script: {instanceID: 10206}
+      Script: {instanceID: 10178}
     - Class: 114
-      Script: {instanceID: 10262}
+      Script: {instanceID: 10194}
     - Class: 114
-      Script: {instanceID: 10268}
+      Script: {instanceID: 10210}
     - Class: 114
-      Script: {instanceID: 10560}
+      Script: {instanceID: 10266}
     - Class: 114
-      Script: {instanceID: 10582}
+      Script: {instanceID: 10272}
     - Class: 114
-      Script: {instanceID: 10802}
+      Script: {instanceID: 10564}
     - Class: 114
-      Script: {instanceID: 10816}
+      Script: {instanceID: 10586}
     - Class: 114
-      Script: {instanceID: 11048}
+      Script: {instanceID: 10806}
+    - Class: 114
+      Script: {instanceID: 10820}
+    - Class: 114
+      Script: {instanceID: 11052}
     - Class: 114
       Script: {instanceID: 11094}
     - Class: 114
-      Script: {instanceID: 11110}
+      Script: {instanceID: 11100}
     - Class: 114
-      Script: {instanceID: 11118}
+      Script: {instanceID: 11116}
     - Class: 114
-      Script: {instanceID: 11200}
+      Script: {instanceID: 11124}
     - Class: 114
-      Script: {instanceID: 11228}
+      Script: {instanceID: 11206}
     - Class: 114
-      Script: {instanceID: 11244}
+      Script: {instanceID: 11234}
     - Class: 114
-      Script: {instanceID: 11394}
+      Script: {instanceID: 11250}
     - Class: 114
-      Script: {instanceID: 11432}
+      Script: {instanceID: 11400}
     - Class: 114
-      Script: {instanceID: 11556}
+      Script: {instanceID: 11438}
     - Class: 114
-      Script: {instanceID: 11642}
+      Script: {instanceID: 11562}
     - Class: 114
-      Script: {instanceID: 11698}
+      Script: {instanceID: 11648}
+    - Class: 114
+      Script: {instanceID: 11704}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 120
@@ -236,6 +245,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: GoogleARCore
     className: Anchor
+  - hash:
+      serializedVersion: 2
+      Hash: 4f14875d5e67f2cdfe2a293fc092dc9c
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Slider
   - hash:
       serializedVersion: 2
       Hash: 71f7f12b8d0f4fd73590db8bcb6d453c
@@ -724,7 +739,7 @@ ScriptsOnlyBuild:
     className: LineRendererHelper
   - hash:
       serializedVersion: 2
-      Hash: b1f6fd1d8abc3dd094ca96c58c4a25b8
+      Hash: fd1b0f7375514ba77d388d321eccab89
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: LerpTest
@@ -820,6 +835,12 @@ ScriptsOnlyBuild:
     className: TrackedPoseDriver
   - hash:
       serializedVersion: 2
+      Hash: 56ba3f6c3d117799ca6137307fc49d8c
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: LearningMode
+  - hash:
+      serializedVersion: 2
       Hash: 72c3a3bf16e34620934073ef94cabbe1
     assemblyName: Assembly-CSharp.dll
     namespaceName: GoogleARCore
@@ -862,7 +883,7 @@ ScriptsOnlyBuild:
     className: ControlPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: d1af25cf3cbe3e39dd11f39966da740f
+      Hash: 92620b723a6590164853e0f1b074123e
     assemblyName: Assembly-CSharp.dll
     namespaceName: GoogleARCore.Examples.HelloAR
     className: HelloARController
@@ -1474,6 +1495,12 @@ ScriptsOnlyBuild:
     className: StarController
   - hash:
       serializedVersion: 2
+      Hash: d42c5533d20262328067d9e790310807
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ShapeDataManager
+  - hash:
+      serializedVersion: 2
       Hash: 35a9693c388776aaf487636491a20f11
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -1540,7 +1567,7 @@ ScriptsOnlyBuild:
     className: TestResultRendererCallback
   - hash:
       serializedVersion: 2
-      Hash: 586103ec6ba936e82633d3d8fb305b57
+      Hash: 537bf9b1bb158def7be94d0f013c7a61
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: UITest

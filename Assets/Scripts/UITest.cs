@@ -8,12 +8,20 @@ public class UITest : MonoBehaviour
 {
     // Start is called before the first frame update
 
+
+
+
+  
+
+
     public GameObject ShapeSelectionMenu; 
     public GameObject LearningMenu;
     public GameObject MainMenu;
     public GameObject QuizMenu;
     public Text feedback;
     public GameObject Background3d;
+    public GameObject DisplayBox;
+    public GameObject ToggleButton;
 
     [System.Serializable]
     public class InteractionEvent : UnityEvent { }
@@ -38,6 +46,7 @@ public class UITest : MonoBehaviour
         LearningMenu.SetActive(true);
         QuizMenu.SetActive(false);
         MainMenu.SetActive(false);
+       // DisplayBox.SetActive(true);
     }
 
     public void GoToQuizMenu()
@@ -51,13 +60,19 @@ public class UITest : MonoBehaviour
 
     public void GoToShapeSelectionMenu()
     {
-        SwitchTo3D();
+       // SwitchTo3D();
         StateTracker.instance.setCurrentState(StateTracker.State.ShapeSelection);
+        if (!Background3d.activeSelf)
+        {
+            ToggleButton.GetComponent<Button>().onClick.Invoke();
+
+        }
         ShapeSelectionMenu.SetActive(true);
         LearningMenu.SetActive(false);
         QuizMenu.SetActive(false);
         MainMenu.SetActive(false);
-        Background3d.SetActive(true);
+       // Background3d.SetActive(true);
+        DisplayBox.SetActive(false);
     }
 
 

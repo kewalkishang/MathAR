@@ -80,6 +80,11 @@ namespace GoogleARCore.Examples.HelloAR
         public GameObject Cone;
         public GameObject Cylinder;
         public GameObject Sphere;
+        /*public GameObject ShapeDetailBox;
+        public GameObject ComponentBox;
+        public GameObject LearningBox;
+        public GameObject QuizBox;*/
+        public GameObject DisplayBoxes;
         public Text FeedbackText;
         public float ForwardDistance = 1f;
         int count = 0;
@@ -176,6 +181,7 @@ namespace GoogleARCore.Examples.HelloAR
                                 SelectedShape.transform.parent = anchor.transform;
                                 SelectedShape.transform.localPosition = Vector3.zero;
                                 SelectedShape.transform.rotation = Quaternion.identity;
+                               
                                 //SelectedShape.transform.position = hit.Pose.position;
 
 
@@ -209,6 +215,9 @@ namespace GoogleARCore.Examples.HelloAR
             UpdateSelectedShape();
             Debug.Log("toggleButton ON clicked");
             IsAR = true;
+
+
+
             Background3DMenu.SetActive(false);
             QuizMenu.SetActive(false);
            // SelectedShape.transform.SetParent(FirstPersonCamera.transform);
@@ -217,7 +226,10 @@ namespace GoogleARCore.Examples.HelloAR
 
 
             SelectedShape.transform.parent = null;
-           // SelectedShape.transform.position = new Vector3(currentGlobalPos.x, FirstPersonCamera.transform.position.y, currentGlobalPos.z);
+
+            DisplayBoxes.transform.parent = SelectedShape.transform;
+            DisplayBoxes.transform.localPosition = new Vector3(0, 0.5f, 0);
+            // SelectedShape.transform.position = new Vector3(currentGlobalPos.x, FirstPersonCamera.transform.position.y, currentGlobalPos.z);
 
         }
 
@@ -231,6 +243,9 @@ namespace GoogleARCore.Examples.HelloAR
             SelectedShape.transform.parent = SelectedParent.transform;
             SelectedShape.transform.localPosition = SelectedShapePosition.transform.localPosition;
             FeedbackText.text = "SWITCH OFF CALLED";
+
+            DisplayBoxes.transform.parent = SelectedParent.transform;
+            DisplayBoxes.transform.localPosition = new Vector3(-1.5f, 0, 0);
         }
 
 

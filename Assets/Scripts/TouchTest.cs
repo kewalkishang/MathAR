@@ -31,7 +31,14 @@ public class TouchTest : MonoBehaviour
     public void UpdateShape(string name)
     {
         Debug.Log("updateShape called");
-       // text.text = "UPDATE SHAPE CALLED FROM TOUCH";
+        // text.text = "UPDATE SHAPE CALLED FROM TOUCH";
+
+
+
+        ShapeDataManager.instance.setShapeDetails(name);
+        ShapeDataManager.instance.setComponentDetails(name);
+        ShapeDataManager.instance.setShapeAreaDetails(name);
+        ShapeDataManager.instance.setShapeVolumeDetails(name);
         UpdateSelectedShape.Invoke();
        
       
@@ -129,11 +136,14 @@ public class TouchTest : MonoBehaviour
             else if (touch.phase == TouchPhase.Moved)
             {
                 Debug.Log("Touch phase Moved");
-              //  text.text = "Touch phase moved";
-                if (SelectedShape != null && (inARMode == false))
+                //  text.text = "Touch phase moved";
+
+                /*if (SelectedShape != null && (inARMode == false))
                 {
                     SelectedShape.transform.Rotate(touch.deltaPosition.y * rotationRate, -touch.deltaPosition.x * rotationRate, 0, Space.World);
-                }
+                }*/
+
+
               //  cube.transform.RotateAround(Vector3.down, touch.deltaPosition.x * rotationRate);
              //   cube.transform.RotateAround(Vector3.right, touch.deltaPosition.y * rotationRate);
             }
