@@ -152,6 +152,17 @@ public class LearningMode : MonoBehaviour
         //  ComponentMenu.SetActive()
     }
 
+    public void EnablePart(string part)
+    {
+        ShapePartReferences.instance.EnableShapePart(SelectedShape.name, part);
+    }
+
+    public void DisablePart(string part)
+    {
+        ShapePartReferences.instance.DisableShapePart(SelectedShape.name, part);
+    }
+
+
     public void UpdateSelectedShape()
     {
 

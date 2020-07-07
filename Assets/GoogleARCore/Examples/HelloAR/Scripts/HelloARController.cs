@@ -318,6 +318,10 @@ namespace GoogleARCore.Examples.HelloAR
             }
         }
 
+
+
+   
+
         /// <summary>
         /// Actually quit the application.
         /// </summary>

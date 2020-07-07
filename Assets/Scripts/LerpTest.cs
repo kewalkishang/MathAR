@@ -44,7 +44,7 @@ public class LerpTest : MonoBehaviour
     {
         if (Background.activeSelf && mode)
         {
-            Debug.Log("Moving");
+         //   Debug.Log("Moving");
             float delTime = Time.deltaTime;
             //Lerp to position
             Cube.transform.localPosition = Vector3.Lerp(Cube.transform.localPosition, DestPos[0], delTime * smooth);

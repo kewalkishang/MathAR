@@ -72,87 +72,73 @@ public class TouchTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      /*  Touch touch;
-        if (Input.touchCount < 1 || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
+        if (Input.GetMouseButtonDown(0))
         {
-            return;
-        }
-
-
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(touch.position);
-        // Does the ray intersect any objects excluding the player layer
-        if (Physics.Raycast(ray, out hit))
-        {
-            text.text = "Hit " + hit.collider.name;
-          //  Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            Debug.Log("Did Hit");
-        }
-        else
-        {
-            text.text = "No HIT";
-            //  Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-            Debug.Log("Did not Hit");
-        }*/
-
-        foreach (Touch touch in Input.touches)
-        {
-            Debug.Log("Touching at: " + touch.position);
-       
-
-            if (touch.phase == TouchPhase.Began)
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
             {
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                // Does the ray intersect any objects excluding the player layer
-                if (Physics.Raycast(ray, out hit))
+                StateTracker.State state = StateTracker.instance.getCurrentState();
+                if (state == StateTracker.State.ShapeSelection && hit.transform.gameObject.tag == "shape")
                 {
-                 
-
-
-                    {
-                        StateTracker.State state = StateTracker.instance.getCurrentState();
-                        if (state == StateTracker.State.ShapeSelection && hit.transform.gameObject.tag=="shape")
-                        {
-                            SelectedShape = hit.transform.gameObject;
-                            DisableOtherThanSelected(hit.transform.name);
-                            UpdateShape(SelectedShape.name);
-                            DisableAR();
-                        }
-                        //  Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-                        Debug.Log("Did Hit");
-                    }
+                    Debug.Log("You selected the " + hit.transform.name); // ensure you picked right object
+                    SelectedShape = hit.transform.gameObject;
+                    DisableOtherThanSelected(hit.transform.name);
+                    UpdateShape(SelectedShape.name);
+                    DisableAR();
                 }
-                else
-                {
-                  //  text.text = "No HIT";
-                    //  Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-                    Debug.Log("Did not Hit");
-                }
-                
-                     //  text.text = "Touch began at " + touch.position;
-                Debug.Log("Touch phase began at: " + touch.position);
-            }
-            else if (touch.phase == TouchPhase.Moved)
-            {
-                Debug.Log("Touch phase Moved");
-                //  text.text = "Touch phase moved";
-
-                /*if (SelectedShape != null && (inARMode == false))
-                {
-                    SelectedShape.transform.Rotate(touch.deltaPosition.y * rotationRate, -touch.deltaPosition.x * rotationRate, 0, Space.World);
-                }*/
-
-
-              //  cube.transform.RotateAround(Vector3.down, touch.deltaPosition.x * rotationRate);
-             //   cube.transform.RotateAround(Vector3.right, touch.deltaPosition.y * rotationRate);
-            }
-            else if (touch.phase == TouchPhase.Ended)
-            {
-              //  text.text = "Touch phase ended";
-               Debug.Log("Touch phase Ended");
             }
         }
+
+        /* foreach (Touch touch in Input.touches)
+         {
+             Debug.Log("Touching at: " + touch.position);
+
+
+             if (touch.phase == TouchPhase.Began)
+             {
+                 RaycastHit hit;
+                 Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                 // Does the ray intersect any objects excluding the player layer
+                 if (Physics.Raycast(ray, out hit))
+                 {
+
+
+
+                     {
+                         StateTracker.State state = StateTracker.instance.getCurrentState();
+                         if (state == StateTracker.State.ShapeSelection && hit.transform.gameObject.tag=="shape")
+                         {
+                             SelectedShape = hit.transform.gameObject;
+                             DisableOtherThanSelected(hit.transform.name);
+                             UpdateShape(SelectedShape.name);
+                             DisableAR();
+                         }
+                         //  Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+                         Debug.Log("Did Hit");
+                     }
+                 }
+                 else
+                 {
+                   //  text.text = "No HIT";
+
+                     Debug.Log("Did not Hit");
+                 }
+
+                      //  text.text = "Touch began at " + touch.position;
+                 Debug.Log("Touch phase began at: " + touch.position);
+             }
+             else if (touch.phase == TouchPhase.Moved)
+             {
+                 Debug.Log("Touch phase Moved");
+
+             }
+             else if (touch.phase == TouchPhase.Ended)
+             {
+               //  text.text = "Touch phase ended";
+                Debug.Log("Touch phase Ended");
+             }
+         }*/
 
 
     }
