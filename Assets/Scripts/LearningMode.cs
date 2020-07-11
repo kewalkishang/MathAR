@@ -38,53 +38,81 @@ public class LearningMode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach (Touch touch in Input.touches)
+
+     
+
+
+        if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Touching at: " + touch.position);
+           
 
 
-            if (touch.phase == TouchPhase.Began)
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
             {
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                // Does the ray intersect any objects excluding the player layer
-                if (Physics.Raycast(ray, out hit))
+                // Debug.Log("You hit part " + hit.transform.name);
+                StateTracker.State state = StateTracker.instance.getCurrentState();
+                if (state == StateTracker.State.LearningMode )
                 {
+                    Debug.Log("You hit part " + hit.transform.name); // ensure you picked right object
+                                                                     //GameObject hitpart = hit.transform.gameObject;
+                    if (hit.transform.gameObject.tag == "part")
+                        SetTouchedComponentInformation(SelectedShape.name, hit.transform.name);
+                    //EnableComponentInformation(SelectedShape.name, hit.transform.name);
 
-
-                    if(StateTracker.instance.getCurrentState() == StateTracker.State.LearningMode && hit.transform.gameObject.tag == "close")
-                    {
+                    if (hit.transform.gameObject.tag == "close")
                         CloseAllInformation();
-                    }
-                   
                 }
-                else
-                {
-                    //  text.text = "No HIT";
-                    //  Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-                    Debug.Log("Did not Hit");
-                }
-
-                //  text.text = "Touch began at " + touch.position;
-                Debug.Log("Touch phase began at: " + touch.position);
-            }
-            else if (touch.phase == TouchPhase.Moved)
-            {
-                Debug.Log("Touch phase Moved");
-                //  text.text = "Touch phase moved";
-                if (SelectedShape != null && (Background.activeSelf == true) && StateTracker.instance.getCurrentState() == StateTracker.State.LearningMode)
-                {
-                    SelectedShape.transform.Rotate(touch.deltaPosition.y * rotationRate, -touch.deltaPosition.x * rotationRate, 0, Space.World);
-                }
-                //  cube.transform.RotateAround(Vector3.down, touch.deltaPosition.x * rotationRate);
-                //   cube.transform.RotateAround(Vector3.right, touch.deltaPosition.y * rotationRate);
-            }
-            else if (touch.phase == TouchPhase.Ended)
-            {
-                //  text.text = "Touch phase ended";
-                Debug.Log("Touch phase Ended");
             }
         }
+        /* foreach (Touch touch in Input.touches)
+         {
+             Debug.Log("Touching at: " + touch.position);
+
+
+             if (touch.phase == TouchPhase.Began)
+             {
+                 RaycastHit hit;
+                 Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                 // Does the ray intersect any objects excluding the player layer
+                 if (Physics.Raycast(ray, out hit))
+                 {
+
+
+                     if(StateTracker.instance.getCurrentState() == StateTracker.State.LearningMode && hit.transform.gameObject.tag == "close")
+                     {
+                         CloseAllInformation();
+                     }
+
+                 }
+                 else
+                 {
+                     //  text.text = "No HIT";
+                     //  Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
+                     Debug.Log("Did not Hit");
+                 }
+
+                 //  text.text = "Touch began at " + touch.position;
+                 Debug.Log("Touch phase began at: " + touch.position);
+             }
+             else if (touch.phase == TouchPhase.Moved)
+             {
+                 Debug.Log("Touch phase Moved");
+                 //  text.text = "Touch phase moved";
+                 if (SelectedShape != null && (Background.activeSelf == true) && StateTracker.instance.getCurrentState() == StateTracker.State.LearningMode)
+                 {
+                     SelectedShape.transform.Rotate(touch.deltaPosition.y * rotationRate, -touch.deltaPosition.x * rotationRate, 0, Space.World);
+                 }
+                 //  cube.transform.RotateAround(Vector3.down, touch.deltaPosition.x * rotationRate);
+                 //   cube.transform.RotateAround(Vector3.right, touch.deltaPosition.y * rotationRate);
+             }
+             else if (touch.phase == TouchPhase.Ended)
+             {
+                 //  text.text = "Touch phase ended";
+                 Debug.Log("Touch phase Ended");
+             }
+         }*/
     }
 
     public void EnableAreaInformation()
@@ -133,11 +161,19 @@ public class LearningMode : MonoBehaviour
         ShapeDetails.SetActive(false);
         AreaDetails.SetActive(false);
         VolumeDetails.SetActive(false);
-        ComponentsDetails.SetActive(true);
+        ComponentsDetails.SetActive(false);
         ComponentMenu.SetActive(true);
         MoveToDIsplayPosition();
+       
         //infoON = true;
     }
+
+    public void SetTouchedComponentInformation(string shapename, string partname)
+    {
+        ComponentsDetails.SetActive(true);
+        ShapeDataManager.instance.setComponentDetails(shapename, partname);
+    }
+
 
     public void CloseAllInformation()
     {

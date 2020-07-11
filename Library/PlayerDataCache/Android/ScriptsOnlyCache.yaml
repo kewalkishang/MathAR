@@ -21,6 +21,7 @@ ScriptsOnlyBuild:
     - QuizManager
     - RenderCircle
     - ShapeDataManager
+    - ShapePartReferences
     - Slider
     - StateTracker
     - TextManager
@@ -134,41 +135,43 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10272}
     - Class: 114
-      Script: {instanceID: 10564}
+      Script: {instanceID: 10296}
     - Class: 114
-      Script: {instanceID: 10586}
+      Script: {instanceID: 10566}
     - Class: 114
-      Script: {instanceID: 10806}
+      Script: {instanceID: 10588}
     - Class: 114
-      Script: {instanceID: 10820}
+      Script: {instanceID: 10808}
     - Class: 114
-      Script: {instanceID: 10922}
+      Script: {instanceID: 10822}
     - Class: 114
-      Script: {instanceID: 11054}
+      Script: {instanceID: 10924}
     - Class: 114
-      Script: {instanceID: 11096}
+      Script: {instanceID: 11056}
     - Class: 114
-      Script: {instanceID: 11102}
+      Script: {instanceID: 11098}
     - Class: 114
-      Script: {instanceID: 11118}
+      Script: {instanceID: 11104}
     - Class: 114
-      Script: {instanceID: 11126}
+      Script: {instanceID: 11120}
     - Class: 114
-      Script: {instanceID: 11208}
+      Script: {instanceID: 11128}
     - Class: 114
-      Script: {instanceID: 11236}
+      Script: {instanceID: 11210}
     - Class: 114
-      Script: {instanceID: 11252}
+      Script: {instanceID: 11238}
     - Class: 114
-      Script: {instanceID: 11402}
+      Script: {instanceID: 11254}
     - Class: 114
-      Script: {instanceID: 11440}
+      Script: {instanceID: 11404}
     - Class: 114
-      Script: {instanceID: 11564}
+      Script: {instanceID: 11442}
     - Class: 114
-      Script: {instanceID: 11650}
+      Script: {instanceID: 11566}
     - Class: 114
-      Script: {instanceID: 11706}
+      Script: {instanceID: 11652}
+    - Class: 114
+      Script: {instanceID: 11708}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 120
@@ -886,7 +889,7 @@ ScriptsOnlyBuild:
     className: ControlPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: 92620b723a6590164853e0f1b074123e
+      Hash: d275a417c08abcfe69fb8b1bf6a90e3f
     assemblyName: Assembly-CSharp.dll
     namespaceName: GoogleARCore.Examples.HelloAR
     className: HelloARController
@@ -908,6 +911,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: ControlTrack
+  - hash:
+      serializedVersion: 2
+      Hash: a491cf77f940f91eef1ff7796d7d18d0
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ShapePartReferences
   - hash:
       serializedVersion: 2
       Hash: 0077fc8e4fbae67f80e80ebd534de5a0
@@ -1408,7 +1417,7 @@ ScriptsOnlyBuild:
     className: PointcloudVisualizer
   - hash:
       serializedVersion: 2
-      Hash: 292589e8a4f36d189f245e7141e5c5fb
+      Hash: 4bc48eb645dcd911d7324b77b9814fab
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: TouchTest
@@ -1504,7 +1513,7 @@ ScriptsOnlyBuild:
     className: StarController
   - hash:
       serializedVersion: 2
-      Hash: d42c5533d20262328067d9e790310807
+      Hash: fecdfcf4e1048644b16f3523e5827287
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShapeDataManager

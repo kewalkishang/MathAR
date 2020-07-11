@@ -8,10 +8,23 @@ public class ShapeDataManager : MonoBehaviour
     [System.Serializable]
     public class ShapeData
     {
+        [System.Serializable]
+        public class ComponentData
+        {
+            public int componentCount;
+            public string componentDetails;
+        }
+
         public string shapeName;
         public string shapeDetails;
-        public string componentname;
-        public string componentdetails;
+        //public string componentname;
+        // public string componentdetails;
+        public ComponentData edgedata;
+        public ComponentData vertexdata;
+        public ComponentData facedata;
+        public ComponentData heightdata;
+        public ComponentData radiusdata;
+
         public string areaHeader;
         public string areaDetails;
         public string volumeHeader;
@@ -78,9 +91,28 @@ public class ShapeDataManager : MonoBehaviour
         ShapeVolumeBody.text = shapedata[shapeList[shapename]].volumeDetails; 
     }
  
-    public void setComponentDetails(string shapename)
+    public void setComponentDetails(string shapename, string partName)
     {
-        ComponentHeader.text = shapedata[shapeList[shapename]].componentname; 
-        ComponentBody.text = shapedata[shapeList[shapename]].componentdetails;
+        string partdata = "";
+        switch (partName)
+        {
+            case "edge": partdata = shapedata[shapeList[shapename]].edgedata.componentDetails;
+                break;
+            case "face":
+                partdata = shapedata[shapeList[shapename]].facedata.componentDetails;
+                break;
+            case "vertex":
+                partdata = shapedata[shapeList[shapename]].vertexdata.componentDetails;
+                break;
+            case "radius":
+                partdata = shapedata[shapeList[shapename]].edgedata.componentDetails;
+                break;
+            case "height":
+                partdata = shapedata[shapeList[shapename]].edgedata.componentDetails;
+                break;
+        }
+
+        ComponentHeader.text = partName ; 
+        ComponentBody.text = partdata;
     }
 }

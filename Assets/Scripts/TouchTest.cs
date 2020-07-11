@@ -12,6 +12,7 @@ public class TouchTest : MonoBehaviour
    
 
     public Text text;
+    public Text header;
     public float rotationRate = 0.01f;
     public GameObject Cube;
     public GameObject Cone;
@@ -30,13 +31,14 @@ public class TouchTest : MonoBehaviour
 
     public void UpdateShape(string name)
     {
+
+
+ 
         Debug.Log("updateShape called");
+        header.text = name;
         // text.text = "UPDATE SHAPE CALLED FROM TOUCH";
-
-
-
         ShapeDataManager.instance.setShapeDetails(name);
-        ShapeDataManager.instance.setComponentDetails(name);
+        ShapeDataManager.instance.setComponentDetails(name, "edge");
         ShapeDataManager.instance.setShapeAreaDetails(name);
         ShapeDataManager.instance.setShapeVolumeDetails(name);
         UpdateSelectedShape.Invoke();
