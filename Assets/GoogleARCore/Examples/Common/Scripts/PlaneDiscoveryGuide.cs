@@ -156,8 +156,11 @@ namespace GoogleARCore.Examples.Common
         /// </summary>
         public void Update()
         {
-            _UpdateDetectedPlaneTrackingState();
-            _UpdateUI();
+            StateTracker.State state = StateTracker.instance.getCurrentState();
+           
+             _UpdateDetectedPlaneTrackingState();
+             _UpdateUI();
+           
         }
 
         /// <summary>

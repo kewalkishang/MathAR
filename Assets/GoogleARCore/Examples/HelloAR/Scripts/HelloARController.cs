@@ -80,6 +80,8 @@ namespace GoogleARCore.Examples.HelloAR
         public GameObject Cone;
         public GameObject Cylinder;
         public GameObject Sphere;
+        public GameObject ARVisualizer; 
+
         /*public GameObject ShapeDetailBox;
         public GameObject ComponentBox;
         public GameObject LearningBox;
@@ -109,7 +111,12 @@ namespace GoogleARCore.Examples.HelloAR
         {
             _UpdateApplicationLifecycle();
 
-           
+
+            if (!Background3DMenu.activeSelf)
+            {
+                DisplayBoxes.transform.LookAt(FirstPersonCamera.transform);
+               // DisplayBoxes.transform.localEulerAngles = new Vector3(DisplayBoxes.transform.localEulerAngles.x , DisplayBoxes.transform.localEulerAngles.y +180 , DisplayBoxes.transform.localEulerAngles.z);
+            }
             // If the player has not touched the screen, we are done with this update.
             Touch touch;
             if (Input.touchCount < 1 || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
@@ -213,6 +220,7 @@ namespace GoogleARCore.Examples.HelloAR
         public void SwitchOnAR()
         {
             UpdateSelectedShape();
+            ARVisualizer.SetActive(true);
             Debug.Log("toggleButton ON clicked");
             IsAR = true;
 
@@ -228,14 +236,16 @@ namespace GoogleARCore.Examples.HelloAR
             SelectedShape.transform.parent = null;
 
             DisplayBoxes.transform.parent = SelectedShape.transform;
-            DisplayBoxes.transform.localPosition = new Vector3(0, 0.5f, 0);
+            DisplayBoxes.transform.localPosition = new Vector3(0, 1f, 0);
             // SelectedShape.transform.position = new Vector3(currentGlobalPos.x, FirstPersonCamera.transform.position.y, currentGlobalPos.z);
 
         }
 
         public void SwitchOffAR()
         {
+
             UpdateSelectedShape();
+            ARVisualizer.SetActive(false);
             Debug.Log("toggleButton OFF clicked");
             IsAR = false;
             Background3DMenu.SetActive(true);
@@ -246,6 +256,7 @@ namespace GoogleARCore.Examples.HelloAR
 
             DisplayBoxes.transform.parent = SelectedParent.transform;
             DisplayBoxes.transform.localPosition = new Vector3(-1.5f, 0, 0);
+            DisplayBoxes.transform.localEulerAngles = new Vector3(0, 180, 0);
         }
 
 
@@ -317,6 +328,10 @@ namespace GoogleARCore.Examples.HelloAR
                 Invoke("_DoQuit", 0.5f);
             }
         }
+
+
+
+   
 
         /// <summary>
         /// Actually quit the application.

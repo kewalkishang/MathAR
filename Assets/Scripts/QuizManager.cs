@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
+
 
 
 public class QuizManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class InteractionEvent : UnityEvent { }
+
+    public InteractionEvent OnMCQSOLVEWHATISQUESTION = new InteractionEvent();
+    public InteractionEvent OnTOUCHQUESTION = new InteractionEvent();
 
 
     [System.Serializable]
@@ -15,8 +22,8 @@ public class QuizManager : MonoBehaviour
         [System.Serializable]
         public class Part
         {
-            public string partname;
-            public GameObject[] parts;
+            public GameObject part;
+            public TextMesh[] partText;
         }
         public string ShapeName;
         public Part[] PartReferences;
@@ -62,7 +69,8 @@ public class QuizManager : MonoBehaviour
     public static QuizManager instance = null;
     public float rotationRate = 0.01f;
     GameObject SelectedShape;
- 
+
+    string ShapeName = null;
     int correctAnswer = 0;
     string currentCorrectAnswer =  null;
     public GameObject Background;
@@ -76,6 +84,10 @@ public class QuizManager : MonoBehaviour
     public Text[] MCQOptions;
     public Button[] MCQButtons;
     public Text AnswerText;
+    public GameObject MCQPanel;
+    public GameObject TouchPanel;
+    public Text feedbackText;
+    public Text TouchText;
 
     private void Awake()
     {
@@ -93,98 +105,200 @@ public class QuizManager : MonoBehaviour
     void Start()
     {
        
-        RandomizeQuestionOrder(questions[0]);
-        StartQuiz("Cube");
-        UpdateScore(); 
+     //   RandomizeQuestionOrder(questions[0]);
+       // StartQuiz("Cube");
+        //UpdateScore(); 
     }
 
     // Update is called once per frame
+
+    public float speed = 10f;
     void Update()
     {
-        foreach (Touch touch in Input.touches)
+
+       /* if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Touching at: " + touch.position);
+            //Input.GetAxis
+            // SelectedShape.transform.Rotate(touch.deltaPosition.y * rotationRate, -touch.deltaPosition.x * rotationRate, 0, Space.World);
+            //   SelectedShape.transform.Rotate(new Vector3(Input.GetAxis("Mouse Y") * speed * Time.deltaTime, -Input.GetAxis("Mouse X") * speed * Time.deltaTime, 0), Space.World);
+
+            float XaxisRotation = Input.GetAxis("Mouse X") * speed;
+            float YaxisRotation = Input.GetAxis("Mouse Y") * speed;
+            // select the axis by which you want to rotate the GameObject
+          SelectedShape.transform.RotateAround(Vector3.down, XaxisRotation);
+            SelectedShape.transform.RotateAround(Vector3.right, YaxisRotation);
 
 
-            if (touch.phase == TouchPhase.Began)
+
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
             {
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                // Does the ray intersect any objects excluding the player layer
-                if (Physics.Raycast(ray, out hit))
+               // Debug.Log("You hit part " + hit.transform.name);
+                StateTracker.State state = StateTracker.instance.getCurrentState();
+                if (state == StateTracker.State.QuizMode && hit.transform.gameObject.tag == "part")
                 {
+                    Debug.Log("You hit part " + hit.transform.name); // ensure you picked right object
+                    GameObject hitpart = hit.transform.gameObject;
+                    hitpart.transform.GetChild(0).gameObject.SetActive(true);
 
-
-                    if (StateTracker.instance.getCurrentState() == StateTracker.State.QuizMode)
+                    if(TouchTargets.Contains(hitpart))
                     {
-                        //  CloseAllInformation();
+                        TouchTargets.Remove(hitpart);
+                    }
+
+                    if(TouchTargets.Count == 0) 
+                    {
+                        TouchText.text = "Good JOB!";
+                        correctAnswer = correctAnswer + 1;
+                        UpdateScore();
+                    }
+                    else
+                    {
+                        UpdateTouchScore();
+                    }
+                    
+                    //DisableOtherThanSelected(hit.transform.name);
+                 //   UpdateShape(SelectedShape.name);
+                  //  DisableAR();
+                }
+            }
+        }*/
+        foreach (Touch touch in Input.touches)
+         {
+             Debug.Log("Touching at: " + touch.position);
+
+
+             if (touch.phase == TouchPhase.Began)
+             {
+                 RaycastHit hit;
+                 Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                 // Does the ray intersect any objects excluding the player layer
+                 if (Physics.Raycast(ray, out hit))
+                 {
+                     feedbackText.text = "HIT "+ hit.transform.gameObject.name;
+                    StateTracker.State state = StateTracker.instance.getCurrentState();
+                    if (state == StateTracker.State.QuizMode && hit.transform.gameObject.tag == "part")
+                    {
+                        Debug.Log("You hit part " + hit.transform.name); // ensure you picked right object
+                        GameObject hitpart = hit.transform.gameObject;
+                        hitpart.transform.GetChild(0).gameObject.SetActive(true);
+
+                        if (TouchTargets.Contains(hitpart))
+                        {
+                            TouchTargets.Remove(hitpart);
+                        }
+
+                        if (TouchTargets.Count == 0)
+                        {
+                            TouchText.text = "Good JOB!";
+                            correctAnswer = correctAnswer + 1;
+                            UpdateScore();
+                        }
+                        else
+                        {
+                            UpdateTouchScore();
+                        }
+
+                        //DisableOtherThanSelected(hit.transform.name);
+                        //   UpdateShape(SelectedShape.name);
+                        //  DisableAR();
                     }
 
                 }
-                else
-                {
-                    //  text.text = "No HIT";
-                    //  Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-                    Debug.Log("Did not Hit");
-                }
+                 else
+                 {
+                     //  text.text = "No HIT";
+                     //  Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
+                     Debug.Log("Did not Hit");
+                 }
 
-                //  text.text = "Touch began at " + touch.position;
-                Debug.Log("Touch phase began at: " + touch.position);
-            }
-            else if (touch.phase == TouchPhase.Moved)
-            {
-                Debug.Log("Touch phase Moved");
-                //  text.text = "Touch phase moved";
-                if (SelectedShape != null && (Background.activeSelf == true) && StateTracker.instance.getCurrentState() == StateTracker.State.QuizMode)
-                {
-                    SelectedShape.transform.Rotate(touch.deltaPosition.y * rotationRate, -touch.deltaPosition.x * rotationRate, 0, Space.World);
-                }
-                //  cube.transform.RotateAround(Vector3.down, touch.deltaPosition.x * rotationRate);
-                //   cube.transform.RotateAround(Vector3.right, touch.deltaPosition.y * rotationRate);
-            }
-            else if (touch.phase == TouchPhase.Ended)
-            {
-                //  text.text = "Touch phase ended";
-                Debug.Log("Touch phase Ended");
-            }
-        }
+                 //  text.text = "Touch began at " + touch.position;
+                 Debug.Log("Touch phase began at: " + touch.position);
+             }
+             else if (touch.phase == TouchPhase.Moved)
+             {
+                 Debug.Log("Touch phase Moved");
+                 //  text.text = "Touch phase moved";
+                 //&& StateTracker.instance.getCurrentState() == StateTracker.State.QuizMode
+                 if (SelectedShape != null && (Background.activeSelf == true) )
+                 {
+                     SelectedShape.transform.Rotate(touch.deltaPosition.y * rotationRate, -touch.deltaPosition.x * rotationRate, 0, Space.World);
+                 }
+                 //  cube.transform.RotateAround(Vector3.down, touch.deltaPosition.x * rotationRate);
+                 //   cube.transform.RotateAround(Vector3.right, touch.deltaPosition.y * rotationRate);
+             }
+             else if (touch.phase == TouchPhase.Ended)
+             {
+                 //  text.text = "Touch phase ended";
+                 Debug.Log("Touch phase Ended");
+             }
+         }
     }
 
 
 
     QuestionBank SelectedQuestion = null;
+
     public void StartQuiz(string name)
     {
-        UpdateSelectedShape();
+       // UpdateSelectedShape();
         currentQuestionNumber = 0;
+
+        correctAnswer = 0;
+
 
         switch (name)
         {
-            case "Cube": SelectedQuestion = questions[0];
+            case "Cube":
+                ShapeName = "Cube";
+                SelectedQuestion = questions[0];
                 break;
             case "Cone":
+                ShapeName = "Cone";
                 SelectedQuestion = questions[1];
                 break;
-                break;
+             
             case "Cylinder":
+                ShapeName = "Cylinder";
                 SelectedQuestion = questions[2];
                 break;
-                break;
+              
             case "Sphere":
+                ShapeName = "Sphere";
                 SelectedQuestion = questions[3];
                 break;
-                break;
+              
             default: Debug.Log("UNKNOWN SHAPE");
                 break;
         }
 
+        RandomizeQuestionOrder(SelectedQuestion);
+        UpdateScore();
+        getNextQuestion(SelectedQuestion, name);
+    }
 
-        getNextQuestion(SelectedQuestion);
+    public void SwitchtoTouchPosition()
+    {
+        OnTOUCHQUESTION.Invoke();
+    }
+
+    public void SwitchToMCQ()
+    {
+        OnMCQSOLVEWHATISQUESTION.Invoke();
     }
 
     public void UpdateScore()
     {
-        ScoreBoard.text = correctAnswer.ToString() + " / " + tempOptions.Count.ToString();
+        ScoreBoard.text = correctAnswer.ToString() + " / " + SelectedQuestion.question.Length.ToString();
+    }
+
+    int TouchCount = 0;
+     
+    public void UpdateTouchScore()
+    {
+        int touched = TouchCount - TouchTargets.Count;
+        TouchText.text =  touched.ToString() + "/" + TouchCount.ToString();
     }
 
     public void RandomizeQuestionOrder(QuestionBank SelectedShapeQuestions)
@@ -235,11 +349,12 @@ public class QuizManager : MonoBehaviour
 
     public void skipCurrentQuestion()
     {
-         getNextQuestion(SelectedQuestion);
+         getNextQuestion(SelectedQuestion, ShapeName);
     }
 
-    public void getNextQuestion(QuestionBank bank)
+    public void getNextQuestion(QuestionBank bank, string name)
     {
+        ResetAllShapes();
         if (currentQuestionNumber < bank.question.Length)
         {
             string currentQuestion = bank.question[ tempQuestions[currentQuestionNumber]].question;
@@ -256,14 +371,30 @@ public class QuizManager : MonoBehaviour
             switch (type)
             {
                 case QuestionBank.QuestionTypes.MCQ :
+                    SwitchToMCQ();
+                    MCQPanel.SetActive(true);
+                    TouchPanel.SetActive(false);
                     EnableMCQButtons();
                     SetupQuestionForMCQ(currentQuestion, answer, otheroptions);
                     break;
-                case QuestionBank.QuestionTypes.SOLVE: SetupQuestionForSolve();
+                case QuestionBank.QuestionTypes.SOLVE:
+                    SwitchToMCQ();
+                    MCQPanel.SetActive(true);
+                    TouchPanel.SetActive(false);
+                    EnableMCQButtons();
+                    SetupQuestionForSolve(currentQuestion, name);
                     break;
-                case QuestionBank.QuestionTypes.TOUCH: SetupQuestionForTouch();
+                case QuestionBank.QuestionTypes.TOUCH:
+                    SwitchtoTouchPosition();
+                    TouchPanel.SetActive(true);
+                    MCQPanel.SetActive(false);
+                    SetupQuestionForTouch(currentQuestion, name);
                     break;
-                case QuestionBank.QuestionTypes.WHATIS: SetupQuestionForWhatIS();
+                case QuestionBank.QuestionTypes.WHATIS:
+                    SwitchToMCQ();
+                    MCQPanel.SetActive(true);
+                    TouchPanel.SetActive(false);
+                    SetupQuestionForWhatIS(currentQuestion, name);
                     break;
             }
 
@@ -274,7 +405,8 @@ public class QuizManager : MonoBehaviour
     }
 
     public void SetupQuestionForMCQ(string question, string answer, List<string> options) {
-        QuestionText.text = question;
+        int qno = currentQuestionNumber + 1;
+        QuestionText.text =  qno.ToString() + ". "  +  question;
 
         AnswerText.text = "";
 
@@ -338,6 +470,7 @@ public class QuizManager : MonoBehaviour
     }
 
 
+
     public void EnableMCQButtons()
     {
         for (int i = 0; i < MCQButtons.Length; i++)
@@ -372,25 +505,359 @@ public class QuizManager : MonoBehaviour
 
     }
 
-    public void SetupQuestionForSolve()
+    public void SetupQuestionForSolve(string question, string ShapeName)
+    {
+
+        AnswerText.text = "";
+
+        List<int> randomedButtonPos = ShuffleAnswerButton(MCQOptions);
+
+
+        //Area
+        float CubeArea;
+        float CylinderArea;
+        float SphereArea;
+        float ConeArea;
+
+        //Volume
+        float Cubevol;
+        float CylinderVol;
+        float SphereVol;
+        float ConeVol;
+        float answer = 0;
+        List<float> options = new List<float>();
+
+        switch (question)
+        {
+            case "area":
+                int qno = currentQuestionNumber + 1;
+                QuestionText.text = qno.ToString() + ". Calculate the area of the following "+ ShapeName;
+
+                switch (ShapeName)
+                {
+                    case "Cube":
+                        int side = GetRandomValueBetweeen(1, 5);
+
+                        SetupCubeforSolveANDWhatIS(side);
+
+                        Debug.Log("SIDE " + side.ToString());
+                        CubeArea = 6 * side * side;
+                        Debug.Log("area"  + CubeArea.ToString());
+                        CylinderArea = 2 * Mathf.PI * side *  (side + side); //2πrh+2πr2
+                        SphereArea = 4  * Mathf.PI * side * side; //4πr2
+                        ConeArea = Mathf.PI * side * (side + Mathf.Sqrt ( side * side + side * side)) ; //πr(r+h2+r2)
+
+                        answer = CubeArea;
+
+                        options.Add(CylinderArea);
+                        options.Add(SphereArea);
+                        options.Add(ConeArea);
+
+                        
+
+                        break;
+                    case "Cone":
+                      
+                        break;
+                       
+                    case "Cylinder":
+                      
+                        
+                        break;
+                        
+                    case "Sphere":
+                      
+                       
+                        break;
+                      
+                    default:
+                        Debug.Log("UNKNOWN SHAPE");
+                        break;
+                }
+
+
+                break;
+            case "volume":
+                 qno = currentQuestionNumber + 1;
+                QuestionText.text = qno.ToString() + ". Calculate the volume of the following " + ShapeName;
+
+                switch (ShapeName)
+                {
+                    case "Cube":
+                        int side = GetRandomValueBetweeen(1, 5);
+
+                        SetupCubeforSolveANDWhatIS(side);
+
+                        Debug.Log("SIDE " + side.ToString());
+                        Cubevol = side * side * side;
+                        Debug.Log("Volume " + Cubevol.ToString());
+                        CylinderVol  = Mathf.PI * side * side * side;
+                        SphereVol = (4 / 3) * Mathf.PI * side * side * side;
+                        ConeVol = Mathf.PI * side * side * (side / 3);
+
+                        answer = Cubevol;
+
+                        options.Add(CylinderVol);
+                        options.Add(SphereVol);
+                        options.Add(ConeVol);
+
+                        break;
+                    case "Cone":
+                        ShapeName = "Cone";
+                        
+                        break;
+                       
+                    case "Cylinder":
+                        ShapeName = "Cylinder";
+                        
+                        break;
+                    
+                    case "Sphere":
+                        ShapeName = "Sphere";
+                        
+                        break;
+                       
+                    default:
+                        Debug.Log("UNKNOWN SHAPE");
+                        break;
+                }
+
+                break;
+        }
+
+        //Populate answers
+        MCQOptions[randomedButtonPos[0]].text = answer.ToString();
+        currentAnswerNumber = randomedButtonPos[0];
+        currentCorrectAnswer = answer.ToString();
+
+        for (int i = 1; i < MCQOptions.Length; i++)
+        {
+            MCQOptions[randomedButtonPos[i]].text = options[i - 1].ToString();
+        }
+
+
+    }
+
+
+    public int GetRandomValueBetweeen(int min, int max)
+    {
+      
+
+        return Random.Range(min, max);
+
+    }
+
+ 
+
+    public void SetupQuestionForWhatIS(string question, string ShapeName)
+    {
+        AnswerText.text = "";
+
+        List<int> randomedButtonPos = ShuffleAnswerButton(MCQOptions);
+
+        switch (ShapeName)
+        {
+            case "Cube":
+                int side = GetRandomValueBetweeen(1, 5);
+
+                SetupCubeforSolveANDWhatIS(side);
+
+                Debug.Log("SIDE " + side.ToString());
+
+                switch (question)
+                {
+                    case "side":
+                        int qno = currentQuestionNumber + 1;
+              
+                        QuestionText.text = qno.ToString() + ". What is the value of the side from the follow cube";
+                        currentCorrectAnswer = side.ToString();
+                        //Populate answers
+                        MCQOptions[randomedButtonPos[0]].text = side.ToString();
+                        currentAnswerNumber = randomedButtonPos[0];
+
+                        int tempVal = GetRandomValueBetweeen(1, 5);
+
+                        List<int> options = new List<int>();
+                        if (tempVal % 2 == 0)
+                        {
+                            options.Add(side + 1);
+                            options.Add(side + 2);
+                            options.Add(side - 1);
+
+                        }
+                        else
+                        {
+                            options.Add(side - 1);
+                            options.Add(side - 2);
+                            options.Add(side + 1);
+                        }
+                        for (int i = 1; i < MCQOptions.Length; i++)
+                        {
+                           
+                            MCQOptions[randomedButtonPos[i]].text = options[i-1].ToString();
+                        }
+
+
+
+                        break;
+                }
+             
+
+
+
+                break;
+            case "Cone":
+
+                break;
+
+            case "Cylinder":
+
+
+                break;
+
+            case "Sphere":
+
+
+                break;
+
+            default:
+                Debug.Log("UNKNOWN SHAPE");
+                break;
+        }
+    }
+
+
+    public void SetupCubeforSolveANDWhatIS(int side)
+    {
+        Debug.Log("Cube Setup" + ShapeReferences[0].PartReferences[0].part.ToString());
+        //Enabling the edges
+        ShapeReferences[0].PartReferences[0].part.SetActive(true);
+        int EdgesCount = ShapeReferences[0].PartReferences[0].partText.Length;
+
+        for(int i= 0; i < ShapeReferences[0].PartReferences[0].part.transform.childCount; i++)
+        {
+            ShapeReferences[0].PartReferences[0].part.transform.GetChild(i).transform.GetChild(0).gameObject.SetActive(true);
+        }
+
+
+        for (int i = 0; i < EdgesCount; i++)
+        {
+            ShapeReferences[0].PartReferences[0].partText[i].text = side.ToString();
+
+        }
+
+    }
+
+    public void SetupCylinderforSolveANDWhatIS()
+    {
+
+    }
+    public void SetupSphereforSolveANDWhatIS()
+    {
+
+    }
+    public void SetupConeforSolveANDWhatIS()
     {
 
     }
 
-    public void SetupQuestionForTouch()
-    {
+    List<GameObject> TouchTargets = new List<GameObject>();
 
+    public void SetupQuestionForTouch(string question, string ShapeName)
+    {
+        // AnswerText.text = "";
+       
+        TouchTargets.Clear();
+
+        switch (ShapeName)
+        {
+            case "Cube":
+
+
+                int partCount = 0;
+
+                Debug.Log("CUBE");
+
+                switch (question)
+                {
+                    case "edge":
+
+                        ShapeReferences[0].PartReferences[0].part.SetActive(true);
+                        partCount = ShapeReferences[0].PartReferences[0].part.transform.childCount;
+
+                        for(int i = 0; i < partCount; i++)
+                        {
+                            TouchTargets.Add(ShapeReferences[0].PartReferences[0].part.transform.GetChild(i).gameObject);
+                        }
+
+
+                        break;
+                    case "vertex":
+                        ShapeReferences[0].PartReferences[1].part.SetActive(true);
+                        partCount = ShapeReferences[0].PartReferences[1].part.transform.childCount;
+                        for (int i = 0; i < partCount; i++)
+                        {
+                            TouchTargets.Add(ShapeReferences[0].PartReferences[1].part.transform.GetChild(i).gameObject);
+                        }
+                        break;
+                    case "face":
+                        ShapeReferences[0].PartReferences[2].part.SetActive(true);
+                        partCount = ShapeReferences[0].PartReferences[2].part.transform.childCount;
+                        for (int i = 0; i < partCount; i++)
+                        {
+                            TouchTargets.Add(ShapeReferences[0].PartReferences[2].part.transform.GetChild(i).gameObject);
+                        }
+                        break;
+                    
+                }
+                int qno = currentQuestionNumber + 1;
+                QuestionText.text = qno.ToString() + ". Touch the " + partCount + "  "+question + " of the  cube.";
+
+
+
+                break;
+            case "Cone":
+
+                break;
+
+            case "Cylinder":
+
+
+                break;
+
+            case "Sphere":
+
+
+                break;
+
+            default:
+                Debug.Log("UNKNOWN SHAPE");
+                break;
+        }
+
+        TouchCount = TouchTargets.Count;
+        UpdateTouchScore();
     }
 
-    public void SetupQuestionForWhatIS()
-    {
+  
 
+
+    public void ResetAllShapes()
+    {
+        for (int i = 0; i < ShapeReferences[0].PartReferences[0].part.transform.childCount; i++)
+        {
+            ShapeReferences[0].PartReferences[0].part.transform.GetChild(i).transform.GetChild(0).gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < ShapeReferences.Length; i++)
+        {
+            for (int j = 0; j < ShapeReferences[i].PartReferences.Length; j++)
+                ShapeReferences[i].PartReferences[j].part.SetActive(false);
+        
+        }   
     }
 
-    public void ShowCurrentAnswer()
-    {
-
-    }
+ 
 
     List<int> tempOptions = new List<int>();
     public List<int> ShuffleAnswerButton(Text[] options)
@@ -426,21 +893,25 @@ public class QuizManager : MonoBehaviour
         if (Cone.activeSelf)
         {
             SelectedShape = Cone;
+            StartQuiz("Cone");
         }
         else
        if (Cube.activeSelf)
         {
             SelectedShape = Cube;
+            StartQuiz("Cube");
         }
         else
        if (Cylinder.activeSelf)
         {
             SelectedShape = Cylinder;
+            StartQuiz("Cylinder");
         }
         else
            if (Sphere.activeSelf)
         {
             SelectedShape = Sphere;
+            StartQuiz("Sphere");
         }
     }
 }

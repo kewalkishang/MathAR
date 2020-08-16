@@ -8,12 +8,6 @@ public class UITest : MonoBehaviour
 {
     // Start is called before the first frame update
 
-
-
-
-  
-
-
     public GameObject ShapeSelectionMenu; 
     public GameObject LearningMenu;
     public GameObject MainMenu;
@@ -22,6 +16,10 @@ public class UITest : MonoBehaviour
     public GameObject Background3d;
     public GameObject DisplayBox;
     public GameObject ToggleButton;
+    public GameObject QuizManagerGameObject;
+    public GameObject LearningManagerGameObject;
+    private string mode = null;
+
 
     [System.Serializable]
     public class InteractionEvent : UnityEvent { }
@@ -44,8 +42,11 @@ public class UITest : MonoBehaviour
         StateTracker.instance.setCurrentState(StateTracker.State.LearningMode);
         ShapeSelectionMenu.SetActive(false);
         LearningMenu.SetActive(true);
+        LearningManagerGameObject.SetActive(true);
         QuizMenu.SetActive(false);
+        QuizManagerGameObject.SetActive(false);
         MainMenu.SetActive(false);
+
        // DisplayBox.SetActive(true);
     }
 
@@ -54,13 +55,16 @@ public class UITest : MonoBehaviour
         StateTracker.instance.setCurrentState(StateTracker.State.QuizMode);
         ShapeSelectionMenu.SetActive(false);
         LearningMenu.SetActive(false);
+        LearningManagerGameObject.SetActive(false);
         QuizMenu.SetActive(true);
+        QuizManagerGameObject.SetActive(true);
         MainMenu.SetActive(false);
     }
 
-    public void GoToShapeSelectionMenu()
+    public void GoToShapeSelectionMenu(string modename)
     {
-       // SwitchTo3D();
+
+        mode = modename;
         StateTracker.instance.setCurrentState(StateTracker.State.ShapeSelection);
         if (!Background3d.activeSelf)
         {
@@ -73,8 +77,21 @@ public class UITest : MonoBehaviour
         MainMenu.SetActive(false);
        // Background3d.SetActive(true);
         DisplayBox.SetActive(false);
+
+        ShapePartReferences.instance.DisableAllParts();
     }
 
+    public void EnableSelectedMode()
+    {
+        if(mode == "learn")
+        {
+            GoToLearningMenu();
+        }
+        else if(mode == "quiz")
+        {
+            GoToQuizMenu();
+        }
+    }
 
     public void GoToMainMenu()
     {
@@ -83,6 +100,8 @@ public class UITest : MonoBehaviour
         LearningMenu.SetActive(false);
         QuizMenu.SetActive(false);
         MainMenu.SetActive(true);
+        LearningManagerGameObject.SetActive(false);
+        QuizManagerGameObject.SetActive(false);
     }
 
     public void learnmode()
